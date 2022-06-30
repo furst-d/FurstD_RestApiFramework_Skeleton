@@ -1,0 +1,277 @@
+/students:
+  - GET:
+      type: DB
+      table: students
+      columns:
+        - "*"
+      parameters:
+        - limit:
+            editable: true
+            location: query
+            required: false
+            default: 200
+        - order by:
+            editable: false
+            order: DESC
+            default:
+              - surname
+              - name
+      authorization:
+        - Admin
+  - POST:
+      type: DB
+      table: students
+      content:
+        - name:
+            type: string
+            required: false
+        - lastname:
+            type: string
+            required: true
+            represents: surname
+        - city:
+            type: string
+            required: true
+            represents: city_id
+            refers:
+              table: cities
+              column: name
+              pk: city_id
+      response:
+        message: Student was added successfully
+
+/students/count:
+  - GET:
+      type: DB
+      table: students
+      columns:
+        - student_id:
+            function: count
+            alias: Number of students
+
+/students/marks/average:
+  - GET:
+      type: DB
+      table: students
+      columns:
+        - name
+        - surname:
+            alias: lastname
+        - mark:
+            function: avg
+            alias: Study average
+      joins:
+        - marks:
+            type: join
+            column: students.student_id
+            pk: marks.student_id
+      parameters:
+        - group by:
+            editable: false
+            default: students.student_id
+            having:
+              - avg:
+                  editable: true
+                  type: integer
+                  location: query
+                  required: false
+                  function: avg
+                  represents: mark
+                  operator: <
+                  default: 2
+
+/students/{id}:
+  - GET:
+      type: DB
+      table: students
+      columns:
+        - students.name
+        - surname:
+            alias: lastname
+        - cities.name:
+            alias: city
+      joins:
+        - cities:
+            type: join
+            column: students.city_id
+            pk: cities.city_id
+      parameters:
+        - id:
+            editable: true
+            type: integer
+            location: path
+            required: true
+            represents: student_id
+            operator: =
+  - PUT:
+      type: DB
+      table: students
+      content:
+        - name:
+            type: string
+            required: false
+        - lastname:
+            type: string
+            required: false
+            represents: surname
+      parameters:
+        - id:
+            editable: true
+            type: integer
+            location: path
+            required: true
+            represents: student_id
+            operator: =
+      response:
+        message: Student was updated successfully
+  - DELETE:
+      type: DB
+      table: students
+      parameters:
+        - id:
+            editable: true
+            type: integer
+            location: path
+            required: true
+            represents: student_id
+            operator: =
+      response:
+        message: Student was deleted successfully
+
+/http:
+  - GET:
+      type: HTTP
+      url: https://httpbin.org/get
+      response:
+        format: JSON
+        message: Get successful
+      authorization:
+        - Admin
+  - POST:
+      type: HTTP
+      url: https://httpbin.org/post
+      content:
+        - something:
+            type: string
+            required: true
+      response:
+        format: JSON
+        message: Post successful
+  - PUT:
+      type: HTTP
+      url: https://httpbin.org/put
+      content:
+        - something:
+            type: string
+            required: true
+      response:
+        format: JSON
+        message: Put successful
+  - DELETE:
+      type: HTTP
+      url: https://httpbin.org/delete
+      response:
+        format: JSON
+        message: Delete successful
+
+/currency:
+  - GET:
+      type: HTTP
+      url: https://api.apilayer.com/fixer/convert?to={to}&from={from}&amount={amount}
+      headers:
+        - apikey: TbXD1h4jFUuZJactGvmIm8twt2kxwOxE
+      parameters:
+        - to:
+            editable: true
+            type: string
+            location: query
+            required: true
+        - from:
+            editable: true
+            type: string
+            location: query
+            required: true
+        - amount:
+            editable: true
+            type: integer
+            location: query
+            required: false
+            default: 1
+      response:
+        format: JSON
+
+/weather:
+  - GET:
+      type: HTTP
+      url: https://community-open-weather-map.p.rapidapi.com/weather?q={city}%2C{state}
+      headers:
+        - X-RapidAPI-Host: community-open-weather-map.p.rapidapi.com
+        - X-RapidAPI-Key: 6bd1003414mshd5b42bb83be7669p133ddcjsn42c741e458b9
+      parameters:
+        - city:
+            editable: true
+            type: string
+            location: query
+            required: true
+        - state:
+            editable: true
+            type: string
+            location: query
+            required: true
+      response:
+        format: JSON
+
+/roles:
+  - GET:
+      type: DB
+      table: auth_roles
+      columns:
+        - name:
+            alias: Role
+  - POST:
+      type: DB
+      table: auth_roles
+      content:
+        - role:
+            type: string
+            required: true
+            represents: name
+      response:
+        message: Role was added successfully
+
+/users:
+  - GET:
+      type: DB
+      table: auth_users
+      columns:
+        - username
+        - name:
+            alias: role
+      joins:
+        - auth_roles:
+            type: join
+            column: auth_users.role_id
+            pk: auth_roles.role_id
+  - POST:
+      type: DB
+      table: auth_users
+      content:
+        - username:
+            type: string
+            required: true
+        - password:
+            type: string
+            required: true
+            hash: sha256
+        - role:
+            type: string
+            required: false
+            represents: role_id
+            refers:
+              table: auth_roles
+              column: name
+              pk: role_id
+      response:
+        message: User was added successfully
+
+
