@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "furstd/furst-d_rest-api-framework",
-            "version": "v1.0.2",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Menshons/FurstD_RestApiFramework.git",
-                "reference": "1681685fd3aabb81541a73fff97aca12f36eb6e5"
+                "reference": "61633bb077be0993dcc8079131d4e638741db8f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Menshons/FurstD_RestApiFramework/zipball/1681685fd3aabb81541a73fff97aca12f36eb6e5",
-                "reference": "1681685fd3aabb81541a73fff97aca12f36eb6e5",
+                "url": "https://api.github.com/repos/Menshons/FurstD_RestApiFramework/zipball/61633bb077be0993dcc8079131d4e638741db8f4",
+                "reference": "61633bb077be0993dcc8079131d4e638741db8f4",
                 "shasum": ""
             },
             "require": {
@@ -43,9 +43,9 @@
             "description": "REST API framework",
             "support": {
                 "issues": "https://github.com/Menshons/FurstD_RestApiFramework/issues",
-                "source": "https://github.com/Menshons/FurstD_RestApiFramework/tree/v1.0.2"
+                "source": "https://github.com/Menshons/FurstD_RestApiFramework/tree/v1.0.4"
             },
-            "time": "2022-06-30T11:09:56+00:00"
+            "time": "2022-07-27T12:09:37+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
